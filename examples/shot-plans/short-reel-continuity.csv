@@ -1,0 +1,10 @@
+shot,start_frame,end_frame_exclusive,frames,room_anchor,keep,change
+1,0,32,32,BEDROOM_A,approved child and pet identity plus house palette,establishing framing
+2,32,64,32,BEDROOM_A,same action direction and fixed photo placement,shot size
+3,64,96,32,HALLWAY_A,travel direction and house lighting,room with an approved anchor
+4,96,128,32,BATHROOM_A,character identity and direction,one story action
+5,128,160,32,KITCHEN_A,house palette and established orientation,room with an approved anchor
+6,160,192,32,KITCHEN_A,same action phase and lighting,shot size or detail
+7,192,224,32,LIVING_A,character and pet identity plus house palette,room with an approved anchor
+8,224,256,32,HALLWAY_A,same hallway and registered photo position,one story action
+9,256,288,32,BEDROOM_A,same bedroom anchor and registered photo position,return to established framing
