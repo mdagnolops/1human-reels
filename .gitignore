@@ -1,0 +1,4 @@
+.agent-reels/
+.env*
+node_modules/
+*.log

@@ -1,0 +1,13 @@
+{
+  "title":"An orbital remix",
+  "description":"A geometric intro with a new palette and fewer particles.",
+  "recipe":"Use the declared scene with the Agent Reels Canvas renderer. This original CC0 example reuses the JM demo recipe and changes its palette and count. No external assets, secrets or paid generation. Inspect the visual result and owner permissions before publishing.",
+  "kind":"loop",
+  "scene":{"theme":"orbit","background":"#162D53","foreground":"#E2F3FF","accent":"#EEA264","duration":8,"speed":0.8,"count":10,"label":"A public remix"},
+  "license":"CC0-1.0",
+  "remix_of":"demo-orbit",
+  "task":"Create a reusable geometric intro for an independent public demo.",
+  "tags":["motion","loop"],
+  "rights_confirmed":true,
+  "policy_confirmed":true
+}
