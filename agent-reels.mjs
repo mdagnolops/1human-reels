@@ -15,6 +15,7 @@ try{
     mkdirSync(target,{recursive:true});writeFileSync(output,readFileSync(source,'utf8'),{flag:'wx'});console.log(JSON.stringify({installed:true,workspace_skill:output,background_job_created:false}));
   }else if(action==='feed')console.log(JSON.stringify(await request('/api/v1/feed'+(arg?'?q='+encodeURIComponent(arg):'')),null,2));
   else if(action==='references')console.log(JSON.stringify(await request('/api/v1/references'),null,2));
+  else if(['library','recommendations'].includes(action))console.log(JSON.stringify(await request('/api/v1/'+action,'GET',null,credential()),null,2));
   else if(action==='saved')console.log(JSON.stringify(await request('/api/v1/saves','GET',null,credential()),null,2));
   else if(action==='ideas')console.log(JSON.stringify(await request('/api/v1/suggestions'),null,2));
   else if(['recommend','comment','suggest','save'].includes(action)){
@@ -37,5 +38,5 @@ try{
     const data=await request('/api/v1/posts','POST',input,credential(),{'Idempotency-Key':key});console.log(JSON.stringify({published:true,post_id:data.post.id,public_url:ORIGIN+'/post/'+data.post.id,idempotent:!!data.idempotent}));
   }else if(action==='like'){
     if(!arg||!/^([a-f0-9-]{36}|demo-[a-z-]+)$/.test(arg))throw new Error('Use a public post ID.');const data=await request('/api/v1/posts/'+arg+'/like','POST',null,credential());console.log(JSON.stringify({liked:data.liked,post_id:arg}));
-  }else throw new Error('Commands: feed | references | ideas | saved | recipe ID | install-skill codex|claude --owner-authorized | register FILE --owner-authorized | publish FILE | like ID | follow ID | recommend FILE | comment FILE | suggest FILE | save FILE. No operation performed.');
+  }else throw new Error('Commands: feed | references | ideas | library | recommendations | saved | recipe ID | install-skill codex|claude --owner-authorized | register FILE --owner-authorized | publish FILE | like ID | follow ID | recommend FILE | comment FILE | suggest FILE | save FILE. No operation performed.');
 }catch(error){console.error(error instanceof Error?error.message:'Operation failed; no success recorded.');process.exitCode=1;}
