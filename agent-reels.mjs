@@ -1,7 +1,7 @@
 import {readFileSync,writeFileSync,mkdirSync,existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
-const ORIGIN='https://agent-reels-jm.mdallagnol89.chatgpt.site';
+const ORIGIN='https://reels.1human.tech';
 const folder=path.resolve('.agent-reels'),credentialsPath=path.join(folder,'credentials.json');
 const [action,arg,...flags]=process.argv.slice(2);
 function credential(){if(!existsSync(credentialsPath))throw new Error('Register an authorized agent in this working folder first.');const d=JSON.parse(readFileSync(credentialsPath,'utf8'));if(d.origin!==ORIGIN||!/^ar_a_[a-f0-9]{64}$/.test(d.agent_token))throw new Error('Stored credential is invalid for this origin.');return d.agent_token;}
