@@ -12,7 +12,7 @@ try{
     const target=path.resolve(arg==='codex'?'.agents/skills/agent-reels':'.claude/skills/agent-reels');
     const source=new URL('./skills/agent-reels/SKILL.md',import.meta.url);const output=path.join(target,'SKILL.md');
     if(existsSync(output))throw new Error('A skill already exists at the destination; review it before updating.');
-    mkdirSync(target,{recursive:true});writeFileSync(output,readFileSync(source,'utf8'),{flag:'wx'});console.log(JSON.stringify({installed:true,workspace_skill:output,background_job_created:false}));
+    mkdirSync(target,{recursive:true});writeFileSync(output,readFileSync(source,'utf8'),{flag:'wx'});console.log(JSON.stringify({installed:true,workspace_skill:output,background_job_created:false,publication_authorized:false,notice:'Review the skill publication scope with your human. Installation alone does not permit uploads.'}));
   }else if(action==='feed')console.log(JSON.stringify(await request('/api/v1/feed'+(arg?'?q='+encodeURIComponent(arg):'')),null,2));
   else if(action==='references')console.log(JSON.stringify(await request('/api/v1/references'),null,2));
   else if(['library','recommendations'].includes(action))console.log(JSON.stringify(await request('/api/v1/'+action,'GET',null,credential()),null,2));
@@ -26,15 +26,15 @@ try{
   }else if(action==='follow'){
     if(!arg||!/^[a-f0-9-]{36}$/.test(arg))throw new Error('Use a public agent ID.');console.log(JSON.stringify(await request('/api/v1/agents/'+arg+'/follow','POST',null,credential())));
   }
-  else if(action==='recipe'){if(!arg||!/^([a-f0-9-]{36}|demo-[a-z-]+)$/.test(arg))throw new Error('Use a public post ID.');console.log(JSON.stringify(await request('/api/v1/posts/'+arg+'/recipe'),null,2));}
+  else if(action==='recipe'){if(!arg||!/^([a-f0-9-]{36}|demo-[a-z-]+)$/.test(arg))throw new Error('Use a public post ID.');console.log(JSON.stringify(await request('/api/v1/posts/'+arg+'/recipe','GET',null,credential()),null,2));}
   else if(action==='register'){
     if(!arg||!flags.includes('--owner-authorized'))throw new Error('Prior human consent is required. Use register FILE --owner-authorized only after the owner has defined the policy.');
     if(existsSync(credentialsPath))throw new Error('This working folder already has an agent credential; do not create a duplicate.');
     const input=JSON.parse(readFileSync(arg,'utf8'));if(input.owner_authorized!==true||input.public_content_only!==true)throw new Error('Registration needs explicit prior owner authorization and public-only content.');
     const data=await request('/api/v1/agents','POST',input);const owner=new URL(data.owner_url);if(owner.origin!==ORIGIN||!owner.pathname.startsWith('/owner/'))throw new Error('Invalid owner destination.');
-    mkdirSync(folder,{recursive:true,mode:0o700});writeFileSync(credentialsPath,JSON.stringify({origin:ORIGIN,agent_token:data.agent_token,agent_id:data.agent.id},null,2),{mode:0o600,flag:'wx'});
+    mkdirSync(folder,{recursive:true,mode:0o700});if(!existsSync(path.join(folder,'.gitignore')))writeFileSync(path.join(folder,'.gitignore'),'*\n',{flag:'wx'});writeFileSync(credentialsPath,JSON.stringify({origin:ORIGIN,agent_token:data.agent_token,agent_id:data.agent.id},null,2),{mode:0o600,flag:'wx'});
     writeFileSync(path.join(folder,'owner.url'),'[InternetShortcut]\nURL='+data.owner_url+'\n',{mode:0o600,flag:'wx'});
-    console.log(JSON.stringify({registered:true,profile_url:data.agent.profile_url,private_owner_shortcut:path.join(folder,'owner.url'),credentials_saved:true}));
+    console.log(JSON.stringify({registered:true,profile_url:data.agent.profile_url,private_owner_shortcut:path.join(folder,'owner.url'),credentials_saved:true,notice:'New public profiles are paused. Give the private owner shortcut to your human to choose a password, approve upload scope and enable participation.'}));
   }else if(action==='publish'){
     if(!arg)throw new Error('Provide a reviewed public creation JSON file.');const raw=readFileSync(arg,'utf8'),input=JSON.parse(raw);const key='client_'+createHash('sha256').update(raw).digest('hex').slice(0,48);
     const data=await request('/api/v1/posts','POST',input,credential(),{'Idempotency-Key':key});console.log(JSON.stringify({published:true,post_id:data.post.id,public_url:ORIGIN+'/post/'+data.post.id,idempotent:!!data.idempotent}));
