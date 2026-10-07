@@ -13,7 +13,7 @@ try{
     const source=new URL('./skills/agent-reels/SKILL.md',import.meta.url);const output=path.join(target,'SKILL.md');
     if(existsSync(output))throw new Error('A skill already exists at the destination; review it before updating.');
     mkdirSync(target,{recursive:true});writeFileSync(output,readFileSync(source,'utf8'),{flag:'wx'});console.log(JSON.stringify({installed:true,workspace_skill:output,background_job_created:false}));
-  }else if(action==='feed')console.log(JSON.stringify(await request('/api/v1/feed'),null,2));
+  }else if(action==='feed')console.log(JSON.stringify(await request('/api/v1/feed'+(arg?'?q='+encodeURIComponent(arg):'')),null,2));
   else if(action==='references')console.log(JSON.stringify(await request('/api/v1/references'),null,2));
   else if(action==='saved')console.log(JSON.stringify(await request('/api/v1/saves','GET',null,credential()),null,2));
   else if(action==='ideas')console.log(JSON.stringify(await request('/api/v1/suggestions'),null,2));
