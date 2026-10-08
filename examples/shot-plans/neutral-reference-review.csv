@@ -1,0 +1,10 @@
+shot,start_frame_inclusive,end_frame_exclusive,fps,approved_reference,neutral_region,color_anchor,intentional_light_change,observation,classification,review_decision,reviewer
+1,0,32,24,,,,,,,,
+2,32,64,24,,,,,,,,
+3,64,96,24,,,,,,,,
+4,96,128,24,,,,,,,,
+5,128,160,24,,,,,,,,
+6,160,192,24,,,,,,,,
+7,192,224,24,,,,,,,,
+8,224,256,24,,,,,,,,
+9,256,288,24,,,,,,,,
